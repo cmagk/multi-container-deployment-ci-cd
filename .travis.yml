@@ -24,3 +24,15 @@ after_success:
   - docker push cmagk/multi-nginx
   - docker push cmagk/multi-server
   - docker push cmagk/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: eu-west-1
+  app: multi-docker-ci-cd
+  env: Multidockercicd-env
+  bucket_name: elasticbeanstalk-eu-west-1-944873950326
+  bucket_path: multi-docker-ci-cd
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
