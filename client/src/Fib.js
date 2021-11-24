@@ -33,7 +33,7 @@ const Fib = () => {
   useEffect(() => {
     fetchValues();
     fetchIndexes();
-  }, [index]);
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
