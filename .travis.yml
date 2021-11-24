@@ -1,0 +1,26 @@
+language: node_js
+node_js:
+  - 16
+cache: npm
+
+services:
+  - docker
+
+before_install:
+  - docker build -t cmagk/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true cmagk/react-test npm run test
+
+after_success:
+  - docker build -t cmagk/multi-client ./client
+  - docker build -t cmagk/multi-nginx ./nginx
+  - docker build -t cmagk/multi-server ./server
+  - docker build -t cmagk/multi-worker ./worker
+  # Login to docker CLI
+  - echo "$DOCKER_ACCESS_TOKEN" | docker login -u "$DOCKER_ID" --password-stdin
+  # Push images to docker hub
+  - docker push cmagk/multi-client
+  - docker push cmagk/multi-nginx
+  - docker push cmagk/multi-server
+  - docker push cmagk/multi-worker
